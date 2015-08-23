@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OrToolsMilpSolver")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Basic implementation of MilpManager using Google or-tools")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OrToolsMilpSolver")]

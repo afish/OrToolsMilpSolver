@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Adam Furmanek</authors>
+    <owners>Adam Furmanek</owners>
+	<licenseUrl>https://github.com/afish/OrToolsMilpSolver/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/afish/OrToolsMilpSolver</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Version 1.0.0.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>or-tools GoogleOrTools MILP ILP MilpManager MilpSolver</tags>
+  </metadata>
+</package>
