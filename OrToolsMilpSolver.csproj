@@ -35,8 +35,8 @@
       <HintPath>..\packages\Google.OrTools.2.0.3300\lib\net40\Google.OrTools.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MilpManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MilpManager.1.0.0.0\lib\net45\MilpManager.dll</HintPath>
+    <Reference Include="MilpManager, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MilpManager.1.1.0.0\lib\net45\MilpManager.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
