@@ -1,11 +1,14 @@
-﻿using MilpManager.Abstraction;
+﻿using Google.OrTools.LinearSolver;
+using MilpManager.Abstraction;
 
 namespace OrToolsMilpManager.Implementation
 {
     public class OrToolsVariable : IVariable
     {
-        public IMilpManager MilpManager { get; }
-        public Domain Domain { get; }
-        public string Name { get; }
+        public IMilpManager MilpManager { get; set; }
+        public Domain Domain { get; set; }
+        public string Name { get; set; }
+        public Variable Variable { get; set; }
+        public double? ConstantValue { get; set; }
     }
 }
