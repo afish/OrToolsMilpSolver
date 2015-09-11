@@ -156,7 +156,14 @@ namespace OrToolsMilpManager.Implementation
 
         public override void SaveModelToFile(string modelPath)
         {
-            File.WriteAllText(modelPath, _solver.ExportModelAsLpFormat(false));
+            if (Path.GetExtension(modelPath) == "lp")
+            {
+                File.WriteAllText(modelPath, _solver.ExportModelAsLpFormat(false));
+            }
+            else
+            {
+                File.WriteAllText(modelPath, _solver.ExportModelAsMpsFormat(true, false));
+            }
         }
 
         public override void LoadModelFromFile(string modelPath, string solverDataPath)
