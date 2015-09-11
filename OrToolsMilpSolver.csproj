@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OrToolsMilpManager</RootNamespace>
     <AssemblyName>OrToolsMilpSolver</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -31,12 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.OrTools, Version=2.0.3298.6634, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Google.OrTools.2.0.3300\lib\net40\Google.OrTools.dll</HintPath>
+    <Reference Include="Google.OrTools, Version=2.0.3322.3902, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Google.OrTools.2.0.3322\lib\net40\Google.OrTools.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MilpManager, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MilpManager.1.1.1.0\lib\net45\MilpManager.dll</HintPath>
+    <Reference Include="MilpManager, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MilpManager.1.2.0.0\lib\net40\MilpManager.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
