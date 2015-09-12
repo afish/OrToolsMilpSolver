@@ -8,67 +8,60 @@ namespace OrToolsMilpManager.Implementation
 {
     public class OrToolsMilpSolver : BaseMilpSolver
     {
-        private readonly Solver _solver;
-        private int _varId;
+        public readonly Solver Solver;
         private int _solutionStatus;
 
         public OrToolsMilpSolver(int integerWidth, string solverName = "CBC_MIXED_INTEGER_PROGRAMMING") : base(integerWidth)
         {
-            _solver = Solver.CreateSolver("OrTools", solverName);
+            Solver = Solver.CreateSolver("OrTools", solverName);
         }
 
-        public override IVariable SumVariables(IVariable first, IVariable second, Domain domain)
+        protected override IVariable InternalSumVariables(IVariable first, IVariable second, Domain domain)
         {
             var firstCasted = first as OrToolsVariable;
             var secondCasted = second as OrToolsVariable;
 
             var variable = CreateAnonymous(domain) as OrToolsVariable;
-            var constraint = _solver.MakeConstraint(0, 0);
+            var constraint = Solver.MakeConstraint(0, 0);
             constraint.SetCoefficient(firstCasted.Variable, 1);
             constraint.SetCoefficient(secondCasted.Variable, 1);
             constraint.SetCoefficient(variable.Variable, -1);
-            variable.ConstantValue = firstCasted.ConstantValue + secondCasted.ConstantValue;
 
             return variable;
         }
 
-        public override IVariable NegateVariable(IVariable variable, Domain domain)
+        protected override IVariable InternalNegateVariable(IVariable variable, Domain domain)
         {
             var firstCasted = variable as OrToolsVariable;
 
             var result = CreateAnonymous(domain) as OrToolsVariable;
-            var constraint = _solver.MakeConstraint(0, 0);
+            var constraint = Solver.MakeConstraint(0, 0);
             constraint.SetCoefficient(firstCasted.Variable, -1);
             constraint.SetCoefficient(result.Variable, -1);
-            result.ConstantValue = -firstCasted.ConstantValue;
 
             return result;
         }
 
-        public override IVariable MultiplyVariableByConstant(IVariable variable, IVariable constant, Domain domain)
+        protected override IVariable InternalMultiplyVariableByConstant(IVariable variable, IVariable constant, Domain domain)
         {
             var firstCasted = variable as OrToolsVariable;
-            var secondCasted = constant as OrToolsVariable;
 
             var result = CreateAnonymous(domain) as OrToolsVariable;
-            var constraint = _solver.MakeConstraint(0, 0);
-            constraint.SetCoefficient(firstCasted.Variable, secondCasted.ConstantValue.Value);
+            var constraint = Solver.MakeConstraint(0, 0);
+            constraint.SetCoefficient(firstCasted.Variable, constant.ConstantValue.Value);
             constraint.SetCoefficient(result.Variable, -1);
-            result.ConstantValue = firstCasted.ConstantValue*secondCasted.ConstantValue;
 
             return result;
         }
 
-        public override IVariable DivideVariableByConstant(IVariable variable, IVariable constant, Domain domain)
+        protected override IVariable InternalDivideVariableByConstant(IVariable variable, IVariable constant, Domain domain)
         {
             var firstCasted = variable as OrToolsVariable;
-            var secondCasted = constant as OrToolsVariable;
 
             var result = CreateAnonymous(domain) as OrToolsVariable;
-            var constraint = _solver.MakeConstraint(0, 0);
-            constraint.SetCoefficient(firstCasted.Variable, 1/secondCasted.ConstantValue.Value);
+            var constraint = Solver.MakeConstraint(0, 0);
+            constraint.SetCoefficient(firstCasted.Variable, 1 / constant.ConstantValue.Value);
             constraint.SetCoefficient(result.Variable, -1);
-            result.ConstantValue = firstCasted.ConstantValue/secondCasted.ConstantValue;
 
             return result;
         }
@@ -77,19 +70,19 @@ namespace OrToolsMilpManager.Implementation
         {
             var firstCasted = variable as OrToolsVariable;
             var secondCasted = bound as OrToolsVariable;
-            var constraint = _solver.MakeConstraint(double.NegativeInfinity, 0);
+            var constraint = Solver.MakeConstraint(double.NegativeInfinity, 0);
             constraint.SetCoefficient(firstCasted.Variable, 1);
             constraint.SetCoefficient(secondCasted.Variable, -1);
         }
 
-        public override IVariable FromConstant(int value, Domain domain)
+        protected override IVariable InternalFromConstant(string name, int value, Domain domain)
         {
             return FromConstant((double)value, domain);
         }
 
-        public override IVariable FromConstant(double value, Domain domain)
+        protected override IVariable InternalFromConstant(string name, double value, Domain domain)
         {
-            var variable = _solver.MakeIntVar(value, value, $"x_{_varId++}");
+            var variable = Solver.MakeIntVar(value, value, name);
             return new OrToolsVariable
             {
                 Domain = domain,
@@ -99,7 +92,7 @@ namespace OrToolsMilpManager.Implementation
             };
         }
 
-        public override IVariable Create(string name, Domain domain)
+        protected override IVariable InternalCreate(string name, Domain domain)
         {
             var variable = new OrToolsVariable
             {
@@ -111,23 +104,23 @@ namespace OrToolsMilpManager.Implementation
             {
                 case Domain.AnyInteger:
                 case Domain.AnyConstantInteger:
-                    variable.Variable = _solver.MakeIntVar(-Int32.MaxValue, Int32.MaxValue, name);
+                    variable.Variable = Solver.MakeIntVar(double.MinValue, double.MaxValue, name);
                     break;
                 case Domain.AnyReal:
                 case Domain.AnyConstantReal:
-                    variable.Variable = _solver.MakeIntVar(-Int32.MaxValue, Int32.MaxValue, name);
+                    variable.Variable = Solver.MakeVar(double.MinValue, double.MaxValue, false, name);
                     break;
                 case Domain.PositiveOrZeroInteger:
                 case Domain.PositiveOrZeroConstantInteger:
-                    variable.Variable = _solver.MakeIntVar(0, Int32.MaxValue, name);
+                    variable.Variable = Solver.MakeIntVar(0, double.MaxValue, name);
                     break;
                 case Domain.PositiveOrZeroReal:
                 case Domain.PositiveOrZeroConstantReal:
-                    variable.Variable = _solver.MakeIntVar(0, Int32.MaxValue, name);
+                    variable.Variable = Solver.MakeVar(0, double.MaxValue, false, name);
                     break;
                 case Domain.BinaryInteger:
                 case Domain.BinaryConstantInteger:
-                    variable.Variable = _solver.MakeIntVar(0, 1, name);
+                    variable.Variable = Solver.MakeIntVar(0, 1, name);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(domain), domain, null);
@@ -136,14 +129,9 @@ namespace OrToolsMilpManager.Implementation
             return variable;
         }
 
-        public override IVariable CreateAnonymous(Domain domain)
-        {
-            return Create($"var_{_varId++}", domain);
-        }
-
         public override void AddGoal(string name, IVariable operation)
         {
-            Objective objective = _solver.Objective();
+            Objective objective = Solver.Objective();
             objective.SetMaximization();
             var cost = (operation as OrToolsVariable).Variable;
             objective.SetCoefficient(cost, 1);
@@ -156,13 +144,13 @@ namespace OrToolsMilpManager.Implementation
 
         public override void SaveModelToFile(string modelPath)
         {
-            if (Path.GetExtension(modelPath) == "lp")
+            if (Path.GetExtension(modelPath).TrimStart('.').ToLower() == "lp")
             {
-                File.WriteAllText(modelPath, _solver.ExportModelAsLpFormat(false));
+                File.WriteAllText(modelPath, Solver.ExportModelAsLpFormat(false));
             }
             else
             {
-                File.WriteAllText(modelPath, _solver.ExportModelAsMpsFormat(true, false));
+                File.WriteAllText(modelPath, Solver.ExportModelAsMpsFormat(true, false));
             }
         }
 
@@ -176,19 +164,9 @@ namespace OrToolsMilpManager.Implementation
             throw new System.NotImplementedException();
         }
 
-        public override IVariable GetByName(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override IVariable TryGetByName(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void Solve()
         {
-            _solutionStatus = _solver.Solve();
+            _solutionStatus = Solver.Solve();
         }
 
         public override double GetValue(IVariable variable)
