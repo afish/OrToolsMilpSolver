@@ -54,25 +54,41 @@ namespace OrToolsMilpManager.Implementation
             return result;
         }
 
-        protected override IVariable InternalDivideVariableByConstant(IVariable variable, IVariable constant, Domain domain)
+        protected override IVariable InternalDivideVariableByConstant(IVariable variable, IVariable constant,
+            Domain domain)
         {
             var firstCasted = variable as OrToolsVariable;
 
             var result = CreateAnonymous(domain) as OrToolsVariable;
             var constraint = Solver.MakeConstraint(0, 0);
-            constraint.SetCoefficient(firstCasted.Variable, 1 / constant.ConstantValue.Value);
+            constraint.SetCoefficient(firstCasted.Variable, 1/constant.ConstantValue.Value);
             constraint.SetCoefficient(result.Variable, -1);
 
             return result;
         }
 
-        public override void SetLessOrEqual(IVariable variable, IVariable bound)
+        private void Set(IVariable variable, IVariable bound, double lowerBound, double upperBound)
         {
             var firstCasted = variable as OrToolsVariable;
             var secondCasted = bound as OrToolsVariable;
-            var constraint = Solver.MakeConstraint(double.NegativeInfinity, 0);
+            var constraint = Solver.MakeConstraint(lowerBound, upperBound);
             constraint.SetCoefficient(firstCasted.Variable, 1);
             constraint.SetCoefficient(secondCasted.Variable, -1);
+        }
+
+        public override void SetLessOrEqual(IVariable variable, IVariable bound)
+        {
+            Set(variable, bound, double.NegativeInfinity, 0);
+        }
+
+        public override void SetGreaterOrEqual(IVariable variable, IVariable bound)
+        {
+            Set(variable, bound, 0, double.PositiveInfinity);
+        }
+
+        public override void SetEqual(IVariable variable, IVariable bound)
+        {
+            Set(variable, bound, 0, 0);
         }
 
         protected override IVariable InternalFromConstant(string name, int value, Domain domain)
