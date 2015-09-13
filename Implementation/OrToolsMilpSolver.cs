@@ -145,17 +145,12 @@ namespace OrToolsMilpManager.Implementation
             return variable;
         }
 
-        public override void AddGoal(string name, IVariable operation)
+        protected override void InternalAddGoal(string name, IVariable operation)
         {
             Objective objective = Solver.Objective();
             objective.SetMaximization();
             var cost = (operation as OrToolsVariable).Variable;
             objective.SetCoefficient(cost, 1);
-        }
-
-        public override string GetGoalExpression(string name)
-        {
-            throw new System.NotImplementedException();
         }
 
         public override void SaveModelToFile(string modelPath)

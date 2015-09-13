@@ -10,6 +10,8 @@ namespace OrToolsMilpManager.Implementation
         public string Name { get; set; }
         public Variable Variable { get; set; }
         public double? ConstantValue { get; set; }
+        public string Expression { get; set; }
+
         public override string ToString()
         {
             return $"[Name = {Name}, Domain = {Domain}, ConstantValue = {ConstantValue}, Variable = {Variable}";
