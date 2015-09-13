@@ -170,16 +170,19 @@ namespace OrToolsMilpManager.Implementation
             }
         }
 
-        public override void LoadModelFromFile(string modelPath, string solverDataPath)
+        protected override object GetObjectsToSerialize()
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
-        public override void SaveSolverDataToFile(string solverOutput)
+        protected override void InternalDeserialize(object o)
         {
-            throw new System.NotImplementedException();
         }
 
+        protected override void InternalLoadModelFromFile(string modelPath)
+        {
+            throw new NotImplementedException();
+        }
         public override void Solve()
         {
             _solutionStatus = Solver.Solve();
