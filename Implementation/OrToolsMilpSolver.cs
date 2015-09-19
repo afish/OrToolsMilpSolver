@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Google.OrTools.LinearSolver;
 using MilpManager.Abstraction;
 using Solver = Google.OrTools.LinearSolver.Solver;
@@ -104,7 +105,8 @@ namespace OrToolsMilpManager.Implementation
                 Domain = domain,
                 MilpManager = this,
                 Variable = variable,
-                ConstantValue = value
+                ConstantValue = value,
+                Name = name
             };
         }
 
@@ -172,11 +174,28 @@ namespace OrToolsMilpManager.Implementation
 
         protected override void InternalDeserialize(object o)
         {
+            var variablesCopy = Variables.Values.OfType<OrToolsVariable>().ToArray();
+            foreach (var variable in variablesCopy)
+            {
+                var solverVariable = Solver.LookupVariableOrNull(variable.Name);
+                if (solverVariable != null)
+                {
+                    variable.Variable = solverVariable;
+                }
+                else
+                {
+                    Variables.Remove(variable.Name);
+                }
+            }
+            foreach (var goal in Goals.ToArray())
+            {
+                AddGoal(goal.Key, goal.Value);
+            }
         }
 
         protected override void InternalLoadModelFromFile(string modelPath)
         {
-            throw new NotImplementedException();
+            Solver.ReadModelFromFile(modelPath, true);
         }
         public override void Solve()
         {

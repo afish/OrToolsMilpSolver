@@ -13,5 +13,12 @@
     <releaseNotes>Version 1.0.0.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>or-tools GoogleOrTools MILP ILP MilpManager MilpSolver</tags>
+    <references>
+      <reference file="Google.OrTools.dll" />
+      <reference file="OrToolsMilpSolver.dll" />
+    </references>
   </metadata>
+  <files>
+    <file src="lib\net40\Google.OrTools.dll" target="lib\net40"/>
+  </files>
 </package>
