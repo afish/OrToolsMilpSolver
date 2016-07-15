@@ -172,7 +172,7 @@ namespace OrToolsMilpManager.Implementation
             return null;
         }
 
-        protected override void InternalDeserialize(object o)
+        protected override void InternalDeserialize(object data)
         {
             var variablesCopy = Variables.Values.OfType<OrToolsVariable>().ToArray();
             foreach (var variable in variablesCopy)
