@@ -12,7 +12,7 @@ namespace OrToolsMilpManager.Implementation
         public readonly Solver Solver;
         private int _solutionStatus;
 
-        public OrToolsMilpSolver(int integerWidth, string solverName = "CBC_MIXED_INTEGER_PROGRAMMING") : base(integerWidth)
+        public OrToolsMilpSolver(int integerWidth, double epsilon = 0.000000001, string solverName = "CBC_MIXED_INTEGER_PROGRAMMING") : base(integerWidth, epsilon)
         {
             Solver = Solver.CreateSolver("OrTools", solverName);
         }
