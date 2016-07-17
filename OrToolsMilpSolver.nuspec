@@ -10,12 +10,16 @@
     <projectUrl>https://github.com/afish/OrToolsMilpSolver</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>Copyright 2015</copyright>
+    <releaseNotes>Version 1.4.0.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
     <tags>or-tools GoogleOrTools MILP ILP MilpManager MilpSolver</tags>
     <references>
       <reference file="Google.OrTools.dll" />
       <reference file="OrToolsMilpSolver.dll" />
     </references>
+	<dependencies>
+	  <dependency id="MilpManager" version="2.0.0" />
+	</dependencies>
   </metadata>
   <files>
     <file src="lib\net40\Google.OrTools.dll" target="lib\net40"/>
