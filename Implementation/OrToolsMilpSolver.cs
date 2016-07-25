@@ -16,6 +16,12 @@ namespace OrToolsMilpManager.Implementation
         {
             Solver = Solver.CreateSolver("OrTools", solverName);
         }
+        
+        public OrToolsMilpSolver(Solver solver, int integerWidth, double epsilon) : base(integerWidth, epsilon)
+        {
+            Solver = solver;
+        }
+
 
         protected override IVariable InternalSumVariables(IVariable first, IVariable second, Domain domain)
         {
