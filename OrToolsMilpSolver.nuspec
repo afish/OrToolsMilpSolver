@@ -3,7 +3,7 @@
   <metadata>
     <id>$id$$packageVersion$</id>
     <version>$version$</version>
-    <title>$title$</title>
+    <title>$title$$packageVersion$</title>
     <authors>Adam Furmanek</authors>
     <owners>Adam Furmanek</owners>
 	<licenseUrl>https://github.com/afish/OrToolsMilpSolver/blob/master/LICENSE</licenseUrl>
