@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>$id$$packageVersion$</id>
     <version>$version$</version>
     <title>$title$</title>
     <authors>Adam Furmanek</authors>
@@ -10,18 +10,14 @@
     <projectUrl>https://github.com/afish/OrToolsMilpSolver</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Version 1.4.1.</releaseNotes>
+    <releaseNotes>Version 1.4.3</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>or-tools GoogleOrTools MILP ILP MilpManager MilpSolver</tags>
-    <references>
-      <reference file="Google.OrTools.dll" />
-      <reference file="OrToolsMilpSolver.dll" />
-    </references>
 	<dependencies>
 	  <dependency id="MilpManager" version="[2.1.0,3.0.0)" />
 	</dependencies>
   </metadata>
   <files>
-    <file src="lib\net40\Google.OrTools.dll" target="lib\net40"/>
+	<file src="lib\net40\$arch$\Google.OrTools.dll" target="lib\net40" />
   </files>
 </package>
