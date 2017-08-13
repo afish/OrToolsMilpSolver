@@ -7,7 +7,7 @@ using Solver = Google.OrTools.LinearSolver.Solver;
 
 namespace OrToolsMilpManager.Implementation
 {
-	public class OrToolsMilpSolver : BaseMilpSolver
+	public class OrToolsMilpSolver : BaseMilpSolver, IModelSaver<MpsSaveFileSettings>, IModelSaver<LpSaveFileSettings>
 	{
 		public Solver Solver => Settings.Solver;
 
@@ -22,10 +22,10 @@ namespace OrToolsMilpManager.Implementation
 
 		protected override IVariable InternalSumVariables(IVariable first, IVariable second, Domain domain)
 		{
-			var firstCasted = first as OrToolsVariable;
-			var secondCasted = second as OrToolsVariable;
+			var firstCasted = first as IOrToolsVariable;
+			var secondCasted = second as IOrToolsVariable;
 
-			var variable = CreateAnonymous(domain) as OrToolsVariable;
+			var variable = CreateAnonymous(domain) as IOrToolsVariable;
 			var constraint = Solver.MakeConstraint(0, 0);
 			constraint.SetCoefficient(firstCasted.Variable, 1);
 			constraint.SetCoefficient(secondCasted.Variable, 1);
@@ -36,9 +36,9 @@ namespace OrToolsMilpManager.Implementation
 
 		protected override IVariable InternalNegateVariable(IVariable variable, Domain domain)
 		{
-			var firstCasted = variable as OrToolsVariable;
+			var firstCasted = variable as IOrToolsVariable;
 
-			var result = CreateAnonymous(domain) as OrToolsVariable;
+			var result = CreateAnonymous(domain) as IOrToolsVariable;
 			var constraint = Solver.MakeConstraint(0, 0);
 			constraint.SetCoefficient(firstCasted.Variable, -1);
 			constraint.SetCoefficient(result.Variable, -1);
@@ -48,9 +48,9 @@ namespace OrToolsMilpManager.Implementation
 
 		protected override IVariable InternalMultiplyVariableByConstant(IVariable variable, IVariable constant, Domain domain)
 		{
-			var firstCasted = variable as OrToolsVariable;
+			var firstCasted = variable as IOrToolsVariable;
 
-			var result = CreateAnonymous(domain) as OrToolsVariable;
+			var result = CreateAnonymous(domain) as IOrToolsVariable;
 			var constraint = Solver.MakeConstraint(0, 0);
 			constraint.SetCoefficient(firstCasted.Variable, constant.ConstantValue.Value);
 			constraint.SetCoefficient(result.Variable, -1);
@@ -61,9 +61,9 @@ namespace OrToolsMilpManager.Implementation
 		protected override IVariable InternalDivideVariableByConstant(IVariable variable, IVariable constant,
 			Domain domain)
 		{
-			var firstCasted = variable as OrToolsVariable;
+			var firstCasted = variable as IOrToolsVariable;
 
-			var result = CreateAnonymous(domain) as OrToolsVariable;
+			var result = CreateAnonymous(domain) as IOrToolsVariable;
 			var constraint = Solver.MakeConstraint(0, 0);
 			constraint.SetCoefficient(firstCasted.Variable, 1/constant.ConstantValue.Value);
 			constraint.SetCoefficient(result.Variable, -1);
@@ -73,8 +73,8 @@ namespace OrToolsMilpManager.Implementation
 
 		private void Set(IVariable variable, IVariable bound, double lowerBound, double upperBound)
 		{
-			var firstCasted = variable as OrToolsVariable;
-			var secondCasted = bound as OrToolsVariable;
+			var firstCasted = variable as IOrToolsVariable;
+			var secondCasted = bound as IOrToolsVariable;
 			var constraint = Solver.MakeConstraint(lowerBound, upperBound);
 			constraint.SetCoefficient(firstCasted.Variable, 1);
 			constraint.SetCoefficient(secondCasted.Variable, -1);
@@ -157,20 +157,23 @@ namespace OrToolsMilpManager.Implementation
 		{
 			Objective objective = Solver.Objective();
 			objective.SetMaximization();
-			var cost = (operation as OrToolsVariable).Variable;
+			var cost = (operation as IOrToolsVariable).Variable;
 			objective.SetCoefficient(cost, 1);
 		}
 
-		public override void SaveModelToFile(string modelPath)
+		public override void SaveModel(SaveFileSettings settings)
 		{
-			if (Path.GetExtension(modelPath).TrimStart('.').ToLower() == "lp")
-			{
-				File.WriteAllText(modelPath, Solver.ExportModelAsLpFormat(false));
-			}
-			else
-			{
-				File.WriteAllText(modelPath, Solver.ExportModelAsMpsFormat(true, false));
-			}
+			File.WriteAllText(settings.Path, Solver.ExportModelAsMpsFormat(true, false));
+		}
+
+		public void SaveModel(MpsSaveFileSettings settings)
+		{
+			File.WriteAllText(settings.Path, Solver.ExportModelAsMpsFormat(settings.Fixed, settings.Obfuscated));
+		}
+
+		public void SaveModel(LpSaveFileSettings settings)
+		{
+			File.WriteAllText(settings.Path, Solver.ExportModelAsLpFormat(settings.Obfuscated));
 		}
 
 		protected override object GetObjectsToSerialize()
@@ -180,7 +183,7 @@ namespace OrToolsMilpManager.Implementation
 
 		protected override void InternalDeserialize(object data)
 		{
-			var variablesCopy = Variables.Values.OfType<OrToolsVariable>().ToArray();
+			var variablesCopy = Variables.Values.OfType<IOrToolsVariable>().ToArray();
 			foreach (var variable in variablesCopy)
 			{
 				var solverVariable = Solver.LookupVariableOrNull(variable.Name);
@@ -210,7 +213,7 @@ namespace OrToolsMilpManager.Implementation
 
 		public override double GetValue(IVariable variable)
 		{
-			return (variable as OrToolsVariable).Variable.SolutionValue();
+			return (variable as IOrToolsVariable).Variable.SolutionValue();
 		}
 
 		public override SolutionStatus GetStatus()

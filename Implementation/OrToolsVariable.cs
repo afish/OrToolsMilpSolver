@@ -4,35 +4,36 @@ using MilpManager.Abstraction;
 
 namespace OrToolsMilpManager.Implementation
 {
-    [Serializable]
-    public class OrToolsVariable : IVariable
-    {
-        [NonSerialized]
-        private IMilpManager _milpManager;
-        [NonSerialized]
-        private Variable _variable;
+	[Serializable]
+	public class OrToolsVariable : IOrToolsVariable
+	{
+		[NonSerialized]
+		private IMilpManager _milpManager;
 
-        public IMilpManager MilpManager
-        {
-            get { return _milpManager; }
-            set { _milpManager = value; }
-        }
+		[NonSerialized]
+		private Variable _variable;
 
-        public Domain Domain { get; set; }
-        public string Name { get; set; }
+		public IMilpManager MilpManager
+		{
+			get { return _milpManager; }
+			set { _milpManager = value; }
+		}
 
-        public Variable Variable
-        {
-            get { return _variable; }
-            set { _variable = value; }
-        }
+		public Domain Domain { get; set; }
+		public string Name { get; set; }
 
-        public double? ConstantValue { get; set; }
-        public string Expression { get; set; }
+		public Variable Variable
+		{
+			get { return _variable; }
+			set { _variable = value; }
+		}
 
-        public override string ToString()
-        {
-            return $"[Name = {Name}, Domain = {Domain}, ConstantValue = {ConstantValue}, Variable = {Variable}";
-        }
-    }
+		public double? ConstantValue { get; set; }
+		public string Expression { get; set; }
+
+		public override string ToString()
+		{
+			return $"[Name = {Name}, Domain = {Domain}, ConstantValue = {ConstantValue}, Variable = {Variable}";
+		}
+	}
 }
