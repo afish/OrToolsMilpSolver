@@ -80,6 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\OrToolsMilpSolverSettings.cs" />
     <Compile Include="Implementation\OrToolsMilpSolver.cs" />
     <Compile Include="Implementation\OrToolsVariable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
