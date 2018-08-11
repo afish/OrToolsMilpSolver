@@ -7,7 +7,7 @@ using Solver = Google.OrTools.LinearSolver.Solver;
 
 namespace OrToolsMilpManager.Implementation
 {
-	public class OrToolsMilpSolver : BaseMilpSolver, IModelSaver<MpsSaveFileSettings>, IModelSaver<LpSaveFileSettings>
+	public class OrToolsMilpSolver : PersistableMilpSolver, IModelSaver<MpsSaveFileSettings>, IModelSaver<LpSaveFileSettings>
 	{
 		public Solver Solver => Settings.Solver;
 
