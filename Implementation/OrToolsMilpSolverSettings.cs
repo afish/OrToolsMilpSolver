@@ -5,11 +5,16 @@ namespace OrToolsMilpManager.Implementation
 {
 	public class OrToolsMilpSolverSettings : MilpManagerSettings
 	{
-		public OrToolsMilpSolverSettings()
+	    public OrToolsMilpSolverSettings()
+	    {
+	        Solver = Solver.CreateSolver("OrTools", "CBC_MIXED_INTEGER_PROGRAMMING");
+	    }
+
+        public OrToolsMilpSolverSettings(Solver solver)
 		{
-			Solver = Solver.CreateSolver("OrTools", "CBC_MIXED_INTEGER_PROGRAMMING");
+			Solver = solver;
 		}
 
-		public Solver Solver { get; set; }
+		public Solver Solver { get; }
 	}
 }
